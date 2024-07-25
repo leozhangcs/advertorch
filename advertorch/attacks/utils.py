@@ -28,14 +28,18 @@ from advertorch.loss import ZeroOneLoss
 from advertorch.attacks import Attack, LabelMixin
 
 
-def zero_gradients(x):
-    if isinstance(x, torch.Tensor):
-        if x.grad is not None:
-            x.grad.detach_()
-            x.grad.zero_()
-    elif isinstance(x, collections.abc.Iterable):
-        for elem in x:
-            zero_gradients(elem)
+# def zero_gradients(x):
+#     if isinstance(x, torch.Tensor):
+#         if x.grad is not None:
+#             x.grad.detach_()
+#             x.grad.zero_()
+#     elif isinstance(x, collections.abc.Iterable):
+#         for elem in x:
+#             zero_gradients(elem)
+
+def zero_gradients(i):
+    for t in iter_gradients(i):
+        t.zero_()
 
 
 def rand_init_delta(delta, x, ord, eps, clip_min, clip_max):
@@ -239,3 +243,5 @@ def attack_whole_dataset(adversary, loader, device="cuda"):
         torch.cat(lst_pred),
         torch.cat(lst_advpred),
     )
+
+

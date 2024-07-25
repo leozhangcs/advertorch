@@ -19,13 +19,17 @@ except ImportError:
     from advertorch.utils import torch_flip as flip
 
 from advertorch.utils import replicate_input
-from advertorch.attacks.utils import zero_gradients
+# from advertorch.attacks.utils import zero_gradients
 
 from .base import Attack
 from .base import LabelMixin
 
 DEFAULT_EPS_DICT_BY_NORM = {'Linf': .3, 'L2': 1., 'L1': 5.0}
 
+
+def zero_gradients(i):
+    for t in iter_gradients(i):
+        t.zero_()
 
 class FABAttack(Attack, LabelMixin):
     """
